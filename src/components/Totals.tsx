@@ -9,7 +9,7 @@ export default function Totals(props: {
 }) {
   return (
     <>
-      <div class="text-white m-1">
+      <div class="text-white">
         <h2>Subtotal: ${props.subtotal?.toFixed(2) || "0.00"}</h2>
         <InputField label="Fee" />
         <InputField label="Tax" />
