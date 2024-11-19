@@ -7,10 +7,12 @@ export default function LoadButtons() {
   return (
     <>
       <div class="space-x-1">
-        <input id="file" class="hidden" type="file" accept="image/*" />
-        <Button class={buttonClass} id="custom_file">
-          Upload Receipt
-        </Button>
+        <span>
+          <input id="file" class="hidden" type="file" accept="image/*" />
+          <Button class={buttonClass} id="custom_file">
+            Upload Receipt
+          </Button>
+        </span>
         <Button class={buttonClass} id="load_url">
           Load From URL
         </Button>
