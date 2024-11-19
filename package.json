@@ -21,6 +21,7 @@
     "@solidjs/router": "^0.13.0",
     "@thisbeyond/solid-select": "^0.14.0",
     "class-variance-authority": "^0.7.0",
+    "mathjs": "^13.2.2",
     "solid-js": "^1.8.11",
     "tailwind-merge": "^2.2.1"
   }
