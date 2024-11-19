@@ -1,7 +1,9 @@
-import type { Component } from 'solid-js';
+import type { Component } from "solid-js";
 
 import { Router } from "@solidjs/router";
 import Root from "./Root";
+
+import "@thisbeyond/solid-select/style.css";
 
 const App: Component = () => {
   return (
