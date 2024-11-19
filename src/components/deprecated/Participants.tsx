@@ -2,6 +2,9 @@ import { Select, createOptions } from "@thisbeyond/solid-select";
 import "@thisbeyond/solid-select/style.css";
 import { Setter } from "solid-js";
 
+/**
+ * @deprecated Integrated in ItemCard
+ **/
 export default function Participants(props: {
   setParticipants: Setter<string[]>;
 }) {

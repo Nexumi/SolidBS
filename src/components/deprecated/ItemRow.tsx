@@ -1,10 +1,16 @@
-import { Select, createOptions } from "@thisbeyond/solid-select";
+import { createOptions, Select } from "@thisbeyond/solid-select";
 import "@thisbeyond/solid-select/style.css";
-import { Accessor, createSignal } from "solid-js";
-import { Flex } from "./ui/flex";
-import { Input } from "./ui/input";
+import { Accessor, createSignal, Setter } from "solid-js";
+import { Flex } from "../ui/flex";
+import { Input } from "../ui/input";
 
-export default function ItemRow(props: { participants: Accessor<string[]> }) {
+/**
+ * @deprecated Replaced with ItemCard
+ **/
+export default function ItemRow(props: {
+  participants: Accessor<string[]>;
+  setParticipants: Setter<string[]>;
+}) {
   const columnField =
     "w-full h-[34px] p-0 m-1 bg-white text-center focus-visible:ring-0 focus-visible:ring-offset-0 rounded-md text-md";
 
