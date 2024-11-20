@@ -1,21 +1,21 @@
-import { Accessor, For, Setter } from "solid-js";
+import { For } from "solid-js";
 import { Item } from "../utils/types";
 import ItemCard from "./ItemCard";
 import { Flex } from "./ui/flex";
 
 export default function Items(props: {
-  participants: Accessor<string[]>;
-  setParticipants: Setter<string[]>;
-  onChange?: (item: Item) => void;
+  participants: string[];
+  items: Item[];
+  onChange?: () => void;
 }) {
   return (
     <>
       <Flex justifyContent="start" class="space-x-2">
-        <For each={[...Array(2)]}>
-          {() => (
+        <For each={props.items}>
+          {(item) => (
             <ItemCard
               participants={props.participants}
-              setParticipants={props.setParticipants}
+              item={item}
               onChange={props.onChange}
             />
           )}
