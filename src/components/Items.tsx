@@ -1,7 +1,6 @@
 import { For } from "solid-js";
 import { Item } from "../utils/types";
 import ItemCard from "./ItemCard";
-import { Flex } from "./ui/flex";
 
 export default function Items(props: {
   participants: string[];
@@ -10,7 +9,7 @@ export default function Items(props: {
 }) {
   return (
     <>
-      <Flex justifyContent="start" class="flex-wrap gap-2">
+      <div class="flex w-full flex-wrap gap-2">
         <For each={props.items}>
           {(item) => (
             <ItemCard
@@ -20,7 +19,7 @@ export default function Items(props: {
             />
           )}
         </For>
-      </Flex>
+      </div>
     </>
   );
 }

@@ -1,4 +1,4 @@
-import { createMemo, createSignal, createUniqueId } from "solid-js";
+import { createMemo, createSignal } from "solid-js";
 import Items from "../components/Items";
 import LoadButtons from "../components/LoadButtons";
 import Loading from "../components/Loading";
@@ -21,7 +21,7 @@ export default function BSPage() {
 
   return (
     <>
-      <div class="m-4 space-y-2">
+      <div class="flex flex-col items-start m-4 gap-y-2">
         <Items
           participants={participants()}
           items={items()}
