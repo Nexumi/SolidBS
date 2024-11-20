@@ -10,7 +10,7 @@ export default function Items(props: {
 }) {
   return (
     <>
-      <Flex justifyContent="start" class="space-x-2">
+      <Flex justifyContent="start" class="flex-wrap gap-2">
         <For each={props.items}>
           {(item) => (
             <ItemCard
