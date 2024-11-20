@@ -8,7 +8,7 @@ import { Item } from "../utils/types";
 
 export default function BSPage() {
   const [items, setItems] = createSignal<Item[]>([
-    { id: createUniqueId(), name: "", price: "", participants: [] },
+    { name: "", price: "", participants: [] },
   ]);
   const participants = createMemo(() =>
     items().reduce((p: string[], item) => {
@@ -31,7 +31,6 @@ export default function BSPage() {
               (item) => item.name || item.price || item.participants.length
             );
             records.push({
-              id: createUniqueId(),
               name: "",
               price: "",
               participants: [],
