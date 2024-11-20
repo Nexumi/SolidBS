@@ -1,37 +1,16 @@
 import { createOptions, Select } from "@thisbeyond/solid-select";
 import { evaluate } from "mathjs";
-import {
-  Accessor,
-  createEffect,
-  createSignal,
-  createUniqueId,
-  Setter,
-} from "solid-js";
 import { Item } from "../utils/types";
 import { Flex } from "./ui/flex";
 import { Input } from "./ui/input";
 
 export default function ItemCard(props: {
-  participants: Accessor<string[]>;
-  setParticipants: Setter<string[]>;
-  onChange?: (item: Item) => void;
+  participants: string[];
+  item: Item;
+  onChange?: () => void;
 }) {
   const columnField =
     "h-[34px] p-0 bg-white text-center focus-visible:ring-0 focus-visible:ring-offset-0 rounded-md text-md";
-
-  const id = createUniqueId();
-  const [itemName, setItemName] = createSignal<string>("");
-  const [itemPrice, setItemPrice] = createSignal<string>("");
-  const [selected, setSelected] = createSignal<string[]>([]);
-
-  createEffect(() => {
-    props.onChange?.({
-      id,
-      name: itemName(),
-      price: itemPrice(),
-      participants: selected(),
-    });
-  });
 
   return (
     <>
@@ -43,43 +22,42 @@ export default function ItemCard(props: {
           <Input
             class={columnField}
             placeholder="Item Name"
+            value={props.item.name}
             onChange={(e) => {
-              setItemName(e.target.value);
+              props.item.name = e.target.value;
+              props.onChange?.();
             }}
           />
           <Input
             class={columnField}
             placeholder="Item Price"
-            value={itemPrice()}
+            value={props.item.price}
             onChange={(e) => {
-              setItemPrice(e.target.value);
+              props.item.price = e.target.value;
               try {
-                setItemPrice(evaluate(e.target.value).toFixed(2));
+                props.item.price = evaluate(e.target.value).toFixed(2);
               } catch {
-                setItemPrice("");
+                props.item.price = "";
               }
+              props.onChange?.();
             }}
           />
           <Select
             class={columnField}
             multiple
-            {...createOptions(props.participants(), {
+            initialValue={props.item.participants}
+            {...createOptions(props.participants, {
               disable: (value) => {
-                return selected().includes(value) || !value.length;
+                return props.item.participants.includes(value);
               },
               createable: true,
             })}
             placeholder="Who Got"
             onChange={(value) => {
-              setSelected(value);
-              props.setParticipants(
-                props
-                  .participants()
-                  .concat(value)
-                  .filter(
-                    (value, index, array) => array.indexOf(value) === index
-                  )
-              );
+              if (props.item.participants.length != value.length) {
+                props.item.participants = value;
+                props.onChange?.();
+              }
             }}
           />
         </div>
