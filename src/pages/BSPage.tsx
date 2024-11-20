@@ -26,8 +26,7 @@ export default function BSPage() {
           participants={participants()}
           items={items()}
           onChange={() => {
-            let records = items();
-            records = records.filter(
+            const records = items().filter(
               (item) => item.name || item.price || item.participants.length
             );
             records.push({
