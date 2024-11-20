@@ -30,14 +30,20 @@ export default function ItemCard(props: {
           />
           <Input
             class={columnField}
+            classList={{
+              "border-red-500 bg-red-50": isNaN(
+                Number(props.item.price.replace("$", ""))
+              ),
+            }}
             placeholder="Item Price"
             value={props.item.price}
             onChange={(e) => {
-              props.item.price = e.target.value;
+              const value = e.target.value.replace(/[^0-9.\/*-+()%]/g, "");
+              props.item.price = value;
               try {
-                props.item.price = evaluate(e.target.value).toFixed(2);
+                props.item.price = "$" + evaluate(value).toFixed(2);
               } catch {
-                props.item.price = "";
+                props.item.price = value;
               }
               props.onChange?.();
             }}
