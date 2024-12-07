@@ -37,7 +37,7 @@ export default function ItemCard(props: {
             placeholder="Item Price"
             value={price()}
             onChange={(e) => {
-              const value = e.target.value.replace(/[^0-9.\/*-+()%]/g, "");
+              const value = e.target.value.replace(/[^0-9.\/*\-+()%]/g, "");
               try {
                 props.item.price = "$" + evaluate(value).toFixed(2);
               } catch {
