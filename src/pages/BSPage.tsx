@@ -34,7 +34,6 @@ export default function BSPage() {
               price: "",
               participants: [],
             });
-            setItems([]);
             setItems(records);
           }}
         />
