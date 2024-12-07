@@ -37,7 +37,7 @@ export default function BSPage() {
             setItems(records);
           }}
         />
-        <LoadButtons />
+        <LoadButtons setItems={setItems} />
         <Totals />
 
         <SplitResults />
