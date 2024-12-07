@@ -12,7 +12,7 @@ export default function ItemCard(props: {
   const columnField =
     "w-full h-[34px] p-0 bg-white text-center focus-visible:ring-0 focus-visible:ring-offset-0 rounded-[0.25rem] text-md";
 
-  const [price, setPrice] = createSignal("");
+  const [price, setPrice] = createSignal(props.item.price);
 
   return (
     <>
