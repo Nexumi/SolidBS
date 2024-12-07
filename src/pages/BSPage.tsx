@@ -5,11 +5,10 @@ import Loading from "../components/Loading";
 import SplitResults from "../components/SplitResults";
 import Totals from "../components/Totals";
 import { Item } from "../utils/types";
+import { parseURL } from "../utils/utils";
 
 export default function BSPage() {
-  const [items, setItems] = createSignal<Item[]>([
-    { name: "", price: "", participants: [] },
-  ]);
+  const [items, setItems] = createSignal<Item[]>(parseURL());
   const participants = createMemo(() =>
     items().reduce((p: string[], item) => {
       item.participants.forEach(
