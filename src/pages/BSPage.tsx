@@ -10,12 +10,14 @@ import { parseURL } from "../utils/utils";
 export default function BSPage() {
   const [items, setItems] = createSignal<Item[]>(parseURL());
   const participants = createMemo(() =>
-    items().reduce((p: string[], item) => {
-      item.participants.forEach(
-        (participant) => !p.includes(participant) && p.push(participant)
-      );
-      return p;
-    }, [])
+    items()
+      .reduce((p: string[], item) => {
+        item.participants.forEach(
+          (participant) => !p.includes(participant) && p.push(participant)
+        );
+        return p;
+      }, [])
+      .sort()
   );
 
   return (
