@@ -1,5 +1,6 @@
 import { createOptions, Select } from "@thisbeyond/solid-select";
 import { evaluate } from "mathjs";
+import { createSignal } from "solid-js";
 import { Item } from "../utils/types";
 import { Input } from "./ui/input";
 
@@ -10,6 +11,8 @@ export default function ItemCard(props: {
 }) {
   const columnField =
     "w-full h-[34px] p-0 bg-white text-center focus-visible:ring-0 focus-visible:ring-offset-0 rounded-[0.25rem] text-md";
+
+  const [price, setPrice] = createSignal("");
 
   return (
     <>
@@ -28,19 +31,19 @@ export default function ItemCard(props: {
             class={columnField}
             classList={{
               "border-red-500 bg-red-50": isNaN(
-                Number(props.item.price.replace("$", ""))
+                Number(price().replace("$", ""))
               ),
             }}
             placeholder="Item Price"
-            value={props.item.price}
+            value={price()}
             onChange={(e) => {
               const value = e.target.value.replace(/[^0-9.\/*-+()%]/g, "");
-              props.item.price = value;
               try {
                 props.item.price = "$" + evaluate(value).toFixed(2);
               } catch {
                 props.item.price = value;
               }
+              setPrice(props.item.price);
               props.onChange?.();
             }}
           />
