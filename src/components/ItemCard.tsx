@@ -16,7 +16,7 @@ export default function ItemCard(props: {
 
   return (
     <>
-      <div class="flex w-full max-w-sm bg-gray-100 rounded-xl border">
+      <div class="flex w-full max-w-none sm:max-w-sm bg-gray-100 rounded-xl border">
         <div class="flex flex-col w-11/12 gap-y-4 m-4">
           <Input
             class={columnField}
