@@ -1,11 +1,11 @@
 import { evaluate } from "mathjs";
-import { Accessor, Show, createMemo, createSignal } from "solid-js";
+import { Show, createMemo, createSignal } from "solid-js";
 import { Item, Mode } from "../utils/types";
 import { priceToFloat } from "../utils/utils";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 
-export default function Totals(props: { items?: Accessor<Item[]> }) {
+export default function Totals(props: { items: Item[] }) {
   const [fee, setFee] = createSignal<string>("");
   const [feeMode, setFeeMode] = createSignal<string>(Mode.DOLLAR);
   const [tax, setTax] = createSignal<string>("");
@@ -15,7 +15,7 @@ export default function Totals(props: { items?: Accessor<Item[]> }) {
 
   const subtotal = createMemo(() => {
     return (
-      props.items?.().reduce((price, item) => {
+      props.items.reduce((price, item) => {
         return price + (parseFloat(item.price.replace("$", "")) || 0);
       }, 0) || 0
     );

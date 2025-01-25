@@ -39,9 +39,9 @@ export default function BSPage() {
           }}
         />
         <LoadButtons setItems={setItems} />
-        <Totals items={items} />
+        <Totals items={items()} />
 
-        <SplitResults />
+        <SplitResults items={items()} participants={participants()} />
 
         <Loading />
       </div>
