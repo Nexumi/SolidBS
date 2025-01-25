@@ -1,10 +1,18 @@
-import { Accessor, Setter, Show, createMemo, createSignal } from "solid-js";
+import { evaluate } from "mathjs";
+import { Accessor, Show, createMemo, createSignal } from "solid-js";
 import { Item } from "../utils/types";
 import { priceToFloat } from "../utils/utils";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 
 export default function Totals(props: { items?: Accessor<Item[]> }) {
+  const [fee, setFee] = createSignal<string>("");
+  const [feeMode, setFeeMode] = createSignal<string>("$");
+  const [tax, setTax] = createSignal<string>("");
+  const [taxMode, setTaxMode] = createSignal<string>("$");
+  const [tip, setTip] = createSignal<string>("");
+  const [tipMode, setTipMode] = createSignal<string>("$");
+
   const subtotal = createMemo(() => {
     return (
       props.items?.().reduce((price, item) => {
@@ -12,10 +20,6 @@ export default function Totals(props: { items?: Accessor<Item[]> }) {
       }, 0) || 0
     );
   });
-
-  const [fee, setFee] = createSignal<string>("");
-  const [tax, setTax] = createSignal<string>("");
-  const [tip, setTip] = createSignal<string>("");
 
   const total = createMemo(() => {
     return (
@@ -30,9 +34,33 @@ export default function Totals(props: { items?: Accessor<Item[]> }) {
     <>
       <div class="text-white">
         <h2>Subtotal: ${subtotal().toFixed(2) || "0.00"}</h2>
-        <InputField label="Fee" />
-        <InputField label="Tax" />
-        <InputField label="Tip" />
+        <InputField
+          label="Fee"
+          value={fee()}
+          mode={feeMode()}
+          onChange={(value, mode) => {
+            setFee(value);
+            setFeeMode(mode);
+          }}
+        />
+        <InputField
+          label="Tax"
+          value={tax()}
+          mode={taxMode()}
+          onChange={(value, mode) => {
+            setTax(value);
+            setTaxMode(mode);
+          }}
+        />
+        <InputField
+          label="Tip"
+          value={tip()}
+          mode={tipMode()}
+          onChange={(value, mode) => {
+            setTip(value);
+            setTipMode(mode);
+          }}
+        />
         <h2>Total: ${total().toFixed(2) || "0.00"}</h2>
       </div>
     </>
@@ -42,14 +70,27 @@ export default function Totals(props: { items?: Accessor<Item[]> }) {
 function InputField(props: {
   label?: string;
   value?: string;
-  onChange?: () => void;
+  mode?: string;
+  subtotal?: string;
+  onChange?: (value: string, mode: string) => void;
 }) {
   const inputField =
     "w-auto h-auto inline p-0 bg-white text-black text-center focus-visible:ring-0 focus-visible:ring-offset-0 rounded-none";
   const buttonClass =
     "border border-gray-200 bg-white text-black hover:bg-gray-100 h-auto px-2 py-0 rounded-none";
 
-  const [mode, setMode] = createSignal("$");
+  const [mode, setMode] = createSignal(props.mode || "$");
+
+  const value = createMemo(() => {
+    const value = parseFloat(props.value || "0");
+    const subtotal = parseFloat(props.subtotal || "0");
+
+    if (mode() === "$") {
+      return parseFloat(((value / subtotal) * 100).toFixed(2));
+    } else {
+      return (value * subtotal).toFixed(2);
+    }
+  });
 
   return (
     <>
@@ -69,7 +110,14 @@ function InputField(props: {
             "rounded-r-md": mode() === "$",
             "rounded-l-md": mode() === "%",
           }}
-          onChange={props.onChange}
+          onChange={(e) => {
+            const value = e.target.value.replace(/[^0-9.\/*\-+()%]/g, "");
+            try {
+              props.onChange?.(evaluate(value).toFixed(2), mode());
+            } catch {
+              props.onChange?.(value, mode());
+            }
+          }}
           value={props.value}
         />
         <Show when={mode() === "%"}>
@@ -82,7 +130,9 @@ function InputField(props: {
         </Show>
       </h3>
       <h3>
-        {props.label}: ${props.value || "0.00"}
+        {props.label}: {mode() === "%" ? "$" : ""}
+        {value() || (mode() === "$" ? "0" : "0.00")}
+        {mode() === "$" ? "%" : ""}
       </h3>
     </>
   );
