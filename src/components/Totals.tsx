@@ -1,17 +1,17 @@
 import { evaluate } from "mathjs";
 import { Accessor, Show, createMemo, createSignal } from "solid-js";
-import { Item } from "../utils/types";
+import { Item, Mode } from "../utils/types";
 import { priceToFloat } from "../utils/utils";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 
 export default function Totals(props: { items?: Accessor<Item[]> }) {
   const [fee, setFee] = createSignal<string>("");
-  const [feeMode, setFeeMode] = createSignal<string>("$");
+  const [feeMode, setFeeMode] = createSignal<string>(Mode.DOLLAR);
   const [tax, setTax] = createSignal<string>("");
-  const [taxMode, setTaxMode] = createSignal<string>("$");
+  const [taxMode, setTaxMode] = createSignal<string>(Mode.DOLLAR);
   const [tip, setTip] = createSignal<string>("");
-  const [tipMode, setTipMode] = createSignal<string>("$");
+  const [tipMode, setTipMode] = createSignal<string>(Mode.DOLLAR);
 
   const subtotal = createMemo(() => {
     return (
@@ -38,6 +38,7 @@ export default function Totals(props: { items?: Accessor<Item[]> }) {
           label="Fee"
           value={fee()}
           mode={feeMode()}
+          subtotal={subtotal()}
           onChange={(value, mode) => {
             setFee(value);
             setFeeMode(mode);
@@ -47,6 +48,7 @@ export default function Totals(props: { items?: Accessor<Item[]> }) {
           label="Tax"
           value={tax()}
           mode={taxMode()}
+          subtotal={subtotal()}
           onChange={(value, mode) => {
             setTax(value);
             setTaxMode(mode);
@@ -56,6 +58,7 @@ export default function Totals(props: { items?: Accessor<Item[]> }) {
           label="Tip"
           value={tip()}
           mode={tipMode()}
+          subtotal={subtotal()}
           onChange={(value, mode) => {
             setTip(value);
             setTipMode(mode);
@@ -71,7 +74,7 @@ function InputField(props: {
   label?: string;
   value?: string;
   mode?: string;
-  subtotal?: string;
+  subtotal?: string | number;
   onChange?: (value: string, mode: string) => void;
 }) {
   const inputField =
@@ -79,16 +82,16 @@ function InputField(props: {
   const buttonClass =
     "border border-gray-200 bg-white text-black hover:bg-gray-100 h-auto px-2 py-0 rounded-none";
 
-  const [mode, setMode] = createSignal(props.mode || "$");
+  const [mode, setMode] = createSignal<string>(props.mode || Mode.DOLLAR);
 
   const value = createMemo(() => {
     const value = parseFloat(props.value || "0");
-    const subtotal = parseFloat(props.subtotal || "0");
+    const subtotal = parseFloat(String(props.subtotal) || "0");
 
     if (mode() === "$") {
       return parseFloat(((value / subtotal) * 100).toFixed(2));
     } else {
-      return (value * subtotal).toFixed(2);
+      return ((value * subtotal) / 100).toFixed(2);
     }
   });
 
@@ -96,10 +99,10 @@ function InputField(props: {
     <>
       <h3>
         {props.label}:{" "}
-        <Show when={mode() === "$"}>
+        <Show when={mode() === Mode.DOLLAR}>
           <Button
             class={`${buttonClass} border-r-0 rounded-l-md`}
-            onclick={() => setMode("%")}
+            onclick={() => setMode(Mode.PERCENTAGE)}
           >
             $
           </Button>
@@ -107,8 +110,8 @@ function InputField(props: {
         <Input
           class={inputField}
           classList={{
-            "rounded-r-md": mode() === "$",
-            "rounded-l-md": mode() === "%",
+            "rounded-r-md": mode() === Mode.DOLLAR,
+            "rounded-l-md": mode() === Mode.PERCENTAGE,
           }}
           onChange={(e) => {
             const value = e.target.value.replace(/[^0-9.\/*\-+()%]/g, "");
@@ -121,19 +124,19 @@ function InputField(props: {
           }}
           value={props.value}
         />
-        <Show when={mode() === "%"}>
+        <Show when={mode() === Mode.PERCENTAGE}>
           <Button
             class={`${buttonClass} border-l-0 rounded-r-md`}
-            onclick={() => setMode("$")}
+            onclick={() => setMode(Mode.DOLLAR)}
           >
             %
           </Button>
         </Show>
       </h3>
       <h3>
-        {props.label}: {mode() === "%" ? "$" : ""}
-        {value() || (mode() === "$" ? "0" : "0.00")}
-        {mode() === "$" ? "%" : ""}
+        {props.label}: {mode() === Mode.PERCENTAGE ? "$" : ""}
+        {value() || (mode() === Mode.DOLLAR ? "0" : "0.00")}
+        {mode() === Mode.DOLLAR ? "%" : ""}
       </h3>
     </>
   );

@@ -13,3 +13,8 @@ export enum ParamType {
   SPRICES = "sprices",
   EXCLUDE = "exclude",
 }
+
+export enum Mode {
+  DOLLAR = "$",
+  PERCENTAGE = "%"
+}
