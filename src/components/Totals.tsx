@@ -112,6 +112,7 @@ function InputField(props: {
           }}
           onChange={(e) => {
             const value = e.target.value.replace(/[^0-9.\/*\-+()%]/g, "");
+            props.onChange?.("", mode());
             try {
               props.onChange?.(evaluate(value).toFixed(2), mode());
             } catch {

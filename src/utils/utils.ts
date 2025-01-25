@@ -28,6 +28,6 @@ export function parseURL(url: string = window.location.href) {
   return result;
 }
 
-export function priceToFloat(price: string) {
-  return parseFloat(price.replace("$", "")) || 0;
+export function priceToFloat(price?: string) {
+  return parseFloat(price?.replace("$", "") || "0") || 0;
 }
