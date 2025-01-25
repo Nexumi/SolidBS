@@ -4,6 +4,16 @@ export type Item = {
   participants: string[];
 };
 
+export type IndividualResult = {
+  fee: string;
+  tax: string;
+  tip: string;
+  items: {
+    name: string;
+    price: string;
+  }[];
+};
+
 export enum ParamType {
   NAMES = "names",
   PRICES = "prices",
@@ -16,5 +26,5 @@ export enum ParamType {
 
 export enum Mode {
   DOLLAR = "$",
-  PERCENTAGE = "%"
+  PERCENTAGE = "%",
 }
