@@ -22,12 +22,18 @@ export default function Totals(props: { items?: Accessor<Item[]> }) {
   });
 
   const total = createMemo(() => {
-    return (
-      subtotal() +
-      priceToFloat(fee()) +
-      priceToFloat(tax()) +
-      priceToFloat(tip())
-    );
+    const parsedFee = priceToFloat(fee());
+    const parsedTax = priceToFloat(tax());
+    const parsedTip = priceToFloat(tip());
+
+    const calculatedFee =
+      feeMode() === Mode.DOLLAR ? parsedFee : (parsedFee * subtotal()) / 100;
+    const calculatedTax =
+      taxMode() === Mode.DOLLAR ? parsedTax : (parsedTax * subtotal()) / 100;
+    const calculatedTip =
+      tipMode() === Mode.DOLLAR ? parsedTip : (parsedTip * subtotal()) / 100;
+
+    return subtotal() + calculatedFee + calculatedTax + calculatedTip;
   });
 
   return (
@@ -84,7 +90,7 @@ function InputField(props: {
 
   const [mode, setMode] = createSignal<string>(props.mode || Mode.DOLLAR);
 
-  const value = createMemo(() => {
+  const displayValue = createMemo(() => {
     const value = parseFloat(props.value || "0");
     const subtotal = parseFloat(String(props.subtotal) || "0");
 
@@ -102,7 +108,10 @@ function InputField(props: {
         <Show when={mode() === Mode.DOLLAR}>
           <Button
             class={`${buttonClass} border-r-0 rounded-l-md`}
-            onclick={() => setMode(Mode.PERCENTAGE)}
+            onclick={() => {
+              setMode(Mode.PERCENTAGE);
+              props.onChange?.(props.value || "", mode());
+            }}
           >
             $
           </Button>
@@ -127,7 +136,10 @@ function InputField(props: {
         <Show when={mode() === Mode.PERCENTAGE}>
           <Button
             class={`${buttonClass} border-l-0 rounded-r-md`}
-            onclick={() => setMode(Mode.DOLLAR)}
+            onclick={() => {
+              setMode(Mode.DOLLAR);
+              props.onChange?.(props.value || "", mode());
+            }}
           >
             %
           </Button>
@@ -135,7 +147,7 @@ function InputField(props: {
       </h3>
       <h3>
         {props.label}: {mode() === Mode.PERCENTAGE ? "$" : ""}
-        {value() || (mode() === Mode.DOLLAR ? "0" : "0.00")}
+        {displayValue() || (mode() === Mode.DOLLAR ? "0" : "0.00")}
         {mode() === Mode.DOLLAR ? "%" : ""}
       </h3>
     </>
