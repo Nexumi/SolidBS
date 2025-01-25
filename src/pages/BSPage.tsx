@@ -39,7 +39,7 @@ export default function BSPage() {
           }}
         />
         <LoadButtons setItems={setItems} />
-        <Totals />
+        <Totals items={items} />
 
         <SplitResults />
 
