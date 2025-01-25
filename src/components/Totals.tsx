@@ -37,7 +37,7 @@ export default function Totals(props: { items: Item[] }) {
   return (
     <>
       <div class="text-white">
-        <h2>Subtotal: ${subtotal().toFixed(2) || "0.00"}</h2>
+        <div>Subtotal: ${subtotal().toFixed(2) || "0.00"}</div>
         <InputField
           label="Fee"
           value={fee()}
@@ -68,7 +68,7 @@ export default function Totals(props: { items: Item[] }) {
             setTipMode(mode);
           }}
         />
-        <h2>Total: ${total().toFixed(2) || "0.00"}</h2>
+        <div>Total: ${total().toFixed(2) || "0.00"}</div>
       </div>
     </>
   );

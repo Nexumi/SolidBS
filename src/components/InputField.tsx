@@ -31,7 +31,7 @@ export default function InputField(props: {
 
   return (
     <>
-      <h3>
+      <div>
         {props.label}:{" "}
         <Show when={mode() === Mode.DOLLAR}>
           <Button
@@ -72,12 +72,12 @@ export default function InputField(props: {
             %
           </Button>
         </Show>
-      </h3>
-      <h3>
+      </div>
+      <div>
         {props.label}: {mode() === Mode.PERCENTAGE ? "$" : ""}
         {displayValue() || (mode() === Mode.DOLLAR ? "0" : "0.00")}
         {mode() === Mode.DOLLAR ? "%" : ""}
-      </h3>
+      </div>
     </>
   );
 }
