@@ -1,6 +1,7 @@
-import { Show } from "solid-js";
+import { For, Show } from "solid-js";
 import { Item } from "../utils/types";
 import { Button } from "./ui/button";
+import Result from "./Result";
 
 export default function SplitResults(props: {
   items: Item[];
@@ -12,7 +13,13 @@ export default function SplitResults(props: {
   return (
     <>
       <Show when={props.participants.length}>
-        <div class="mt-[50px]"></div>
+        <div class="text-white">
+          <For each={props.participants}>
+            {(participant) => (
+              <Result items={props.items} participant={participant} />
+            )}
+          </For>
+        </div>
         <Button class={buttonClass} id="share">
           Share
         </Button>
