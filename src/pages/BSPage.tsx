@@ -2,13 +2,13 @@ import { createMemo, createSignal } from "solid-js";
 import Items from "../components/Items";
 import LoadButtons from "../components/LoadButtons";
 import Loading from "../components/Loading";
-import SplitResults from "../components/SplitResults";
 import Totals from "../components/Totals";
 import { Item } from "../utils/types";
 import { parseURL } from "../utils/utils";
 
 export default function BSPage() {
-  const [items, setItems] = createSignal<Item[]>(parseURL());
+  const { fee, tax, tip, items: i } = parseURL();
+  const [items, setItems] = createSignal<Item[]>(i);
   const participants = createMemo(() =>
     items()
       .reduce((p: string[], item) => {
@@ -39,9 +39,7 @@ export default function BSPage() {
           }}
         />
         <LoadButtons setItems={setItems} />
-        <Totals items={items()} />
-
-        <SplitResults items={items()} participants={participants()} />
+        <Totals addons={{ fee, tax, tip }} items={items()} participants={participants()} />
 
         <Loading />
       </div>

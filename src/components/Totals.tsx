@@ -1,15 +1,30 @@
 import { createMemo, createSignal } from "solid-js";
-import { Item, Mode } from "../utils/types";
+import { Addon, Item, Mode } from "../utils/types";
 import { priceToFloat } from "../utils/utils";
 import InputField from "./InputField";
+import SplitResults from "./SplitResults";
 
-export default function Totals(props: { items: Item[] }) {
-  const [fee, setFee] = createSignal<string>("");
-  const [feeMode, setFeeMode] = createSignal<string>(Mode.DOLLAR);
-  const [tax, setTax] = createSignal<string>("");
-  const [taxMode, setTaxMode] = createSignal<string>(Mode.DOLLAR);
-  const [tip, setTip] = createSignal<string>("");
-  const [tipMode, setTipMode] = createSignal<string>(Mode.DOLLAR);
+export default function Totals(props: {
+  addons: {
+    fee: Addon;
+    tax: Addon;
+    tip: Addon;
+  };
+  items: Item[];
+  participants: string[];
+}) {
+  const [fee, setFee] = createSignal<string>(props.addons.fee.amount);
+  const [feeMode, setFeeMode] = createSignal<string>(
+    props.addons.fee.mode || Mode.DOLLAR
+  );
+  const [tax, setTax] = createSignal<string>(props.addons.tax.amount);
+  const [taxMode, setTaxMode] = createSignal<string>(
+    props.addons.tax.mode || Mode.DOLLAR
+  );
+  const [tip, setTip] = createSignal<string>(props.addons.tip.amount);
+  const [tipMode, setTipMode] = createSignal<string>(
+    props.addons.tip.mode || Mode.DOLLAR
+  );
 
   const subtotal = createMemo(() => {
     return (
@@ -70,6 +85,25 @@ export default function Totals(props: { items: Item[] }) {
         />
         <div>Total: ${total().toFixed(2) || "0.00"}</div>
       </div>
+
+      <SplitResults
+        addons={{
+          feePercentage:
+            feeMode() === Mode.DOLLAR
+              ? (parseFloat(fee()) / subtotal()) * 100
+              : parseFloat(fee()),
+          taxPercentage:
+            taxMode() === Mode.DOLLAR
+              ? (parseFloat(tax()) / subtotal()) * 100
+              : parseFloat(tax()),
+          tipPercentage:
+            tipMode() === Mode.DOLLAR
+              ? (parseFloat(tip()) / subtotal()) * 100
+              : parseFloat(tip()),
+        }}
+        items={props.items}
+        participants={props.participants}
+      />
     </>
   );
 }

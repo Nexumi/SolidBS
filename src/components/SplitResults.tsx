@@ -1,9 +1,14 @@
 import { For, Show } from "solid-js";
 import { Item } from "../utils/types";
-import { Button } from "./ui/button";
 import Result from "./Result";
+import { Button } from "./ui/button";
 
 export default function SplitResults(props: {
+  addons: {
+    feePercentage: number;
+    taxPercentage: number;
+    tipPercentage: number;
+  };
   items: Item[];
   participants: string[];
 }) {
@@ -16,7 +21,15 @@ export default function SplitResults(props: {
         <div class="text-white">
           <For each={props.participants}>
             {(participant) => (
-              <Result items={props.items} participant={participant} />
+              <Result
+                addons={{
+                  feePercentage: props.addons.feePercentage,
+                  taxPercentage: props.addons.taxPercentage,
+                  tipPercentage: props.addons.tipPercentage,
+                }}
+                items={props.items}
+                participant={participant}
+              />
             )}
           </For>
         </div>

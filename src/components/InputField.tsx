@@ -22,7 +22,7 @@ export default function InputField(props: {
     const value = parseFloat(props.value || "0");
     const subtotal = parseFloat(String(props.subtotal) || "0");
 
-    if (mode() === "$") {
+    if (mode() === Mode.DOLLAR) {
       return parseFloat(((value / subtotal) * 100).toFixed(2));
     } else {
       return ((value * subtotal) / 100).toFixed(2);
