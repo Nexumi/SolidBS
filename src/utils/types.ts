@@ -4,14 +4,9 @@ export type Item = {
   participants: string[];
 };
 
-export type IndividualResult = {
-  fee: string;
-  tax: string;
-  tip: string;
-  items: {
-    name: string;
-    price: string;
-  }[];
+export type Addon = {
+  mode: string;
+  amount: string;
 };
 
 export enum ParamType {
