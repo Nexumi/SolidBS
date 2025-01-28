@@ -11,11 +11,12 @@ export default function Result(props: { items: Item[]; participant: string }) {
       items: [],
     } as IndividualResult;
     props.items.forEach((item) => {
-      if (item.name !== props.participant) return;
-      result.items.push({
-        name: item.name,
-        price: String(priceToFloat(item.price) / item.participants.length),
-      });
+      if (item.participants.includes(props.participant)) {
+        result.items.push({
+          name: item.name,
+          price: String(priceToFloat(item.price) / item.participants.length),
+        });
+      }
     });
     return result;
   });
