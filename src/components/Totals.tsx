@@ -5,25 +5,23 @@ import InputField from "./InputField";
 import SplitResults from "./SplitResults";
 
 export default function Totals(props: {
-  addons: {
-    fee: Addon;
-    tax: Addon;
-    tip: Addon;
-  };
+  fee: Addon;
+  tax: Addon;
+  tip: Addon;
   items: Item[];
   participants: string[];
 }) {
-  const [fee, setFee] = createSignal<string>(props.addons.fee.amount);
+  const [fee, setFee] = createSignal<string>(props.fee.amount);
   const [feeMode, setFeeMode] = createSignal<string>(
-    props.addons.fee.mode || Mode.DOLLAR,
+    props.fee.mode || Mode.DOLLAR,
   );
-  const [tax, setTax] = createSignal<string>(props.addons.tax.amount);
+  const [tax, setTax] = createSignal<string>(props.tax.amount);
   const [taxMode, setTaxMode] = createSignal<string>(
-    props.addons.tax.mode || Mode.DOLLAR,
+    props.tax.mode || Mode.DOLLAR,
   );
-  const [tip, setTip] = createSignal<string>(props.addons.tip.amount);
+  const [tip, setTip] = createSignal<string>(props.tip.amount);
   const [tipMode, setTipMode] = createSignal<string>(
-    props.addons.tip.mode || Mode.DOLLAR,
+    props.tip.mode || Mode.DOLLAR,
   );
 
   const subtotal = createMemo(() => {

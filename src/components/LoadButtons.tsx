@@ -1,10 +1,15 @@
 import { createSignal, onCleanup, onMount, Setter, Show } from "solid-js";
 import { getExpandedUrl } from "../utils/requests";
-import { Item } from "../utils/types";
+import { Addon, Item } from "../utils/types";
 import { parseURL } from "../utils/utils";
 import { Button } from "./ui/button";
 
-export default function LoadButtons(props: { setItems: Setter<Item[]> }) {
+export default function LoadButtons(props: {
+  setFee: Setter<Addon>;
+  setTax: Setter<Addon>;
+  setTip: Setter<Addon>;
+  setItems: Setter<Item[]>;
+}) {
   const buttonClass =
     "h-auto border bg-white px-2 py-1 text-black hover:bg-gray-200";
 
@@ -42,11 +47,13 @@ export default function LoadButtons(props: { setItems: Setter<Item[]> }) {
             onClick={() => {
               const url = prompt("Enter URL") || "";
               if (url) {
-                if (url.includes("short.jpkit.us")) {
-                  props.setItems(parseURL(getExpandedUrl(url)));
-                } else {
-                  props.setItems(parseURL(url));
-                }
+                const results = parseURL(
+                  url.includes("short.jpkit.us") ? getExpandedUrl(url) : url,
+                );
+                props.setFee(results.fee);
+                props.setTax(results.tax);
+                props.setTip(results.tip);
+                props.setItems(results.items);
               }
             }}
           >

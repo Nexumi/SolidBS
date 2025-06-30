@@ -3,11 +3,14 @@ import Items from "../components/Items";
 import LoadButtons from "../components/LoadButtons";
 import Loading from "../components/Loading";
 import Totals from "../components/Totals";
-import { Item } from "../utils/types";
+import { Addon, Item } from "../utils/types";
 import { parseURL } from "../utils/utils";
 
 export default function BSPage() {
-  const { fee, tax, tip, items: i } = parseURL();
+  const { fee: f, tax: ta, tip: ti, items: i } = parseURL();
+  const [fee, setFee] = createSignal<Addon>(f);
+  const [tax, setTax] = createSignal<Addon>(ta);
+  const [tip, setTip] = createSignal<Addon>(ti);
   const [items, setItems] = createSignal<Item[]>(i);
   const participants = createMemo(() =>
     items()
@@ -38,9 +41,16 @@ export default function BSPage() {
             setItems(records);
           }}
         />
-        <LoadButtons setItems={setItems} />
+        <LoadButtons
+          setFee={setFee}
+          setTax={setTax}
+          setTip={setTip}
+          setItems={setItems}
+        />
         <Totals
-          addons={{ fee, tax, tip }}
+          fee={fee()}
+          tax={tax()}
+          tip={tip()}
           items={items()}
           participants={participants()}
         />
