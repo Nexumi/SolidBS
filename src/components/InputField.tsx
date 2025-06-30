@@ -31,7 +31,7 @@ export default function InputField(props: {
     <>
       <div>
         {props.label}:{" "}
-        <Show when={props.mode === Mode.DOLLAR}>
+        <Show when={!props.mode || props.mode === Mode.DOLLAR}>
           <Button
             class={`${buttonClass} rounded-l-md border-r-0`}
             onclick={() => {
@@ -44,7 +44,7 @@ export default function InputField(props: {
         <Input
           class={inputField}
           classList={{
-            "rounded-r-md": props.mode === Mode.DOLLAR,
+            "rounded-r-md": !props.mode || props.mode === Mode.DOLLAR,
             "rounded-l-md": props.mode === Mode.PERCENTAGE,
           }}
           onChange={(e) => {

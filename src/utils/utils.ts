@@ -28,15 +28,15 @@ export function parseURL(url: string = window.location.href) {
 
   return {
     fee: {
-      mode: extra.length === 4 ? Mode.DOLLAR : extra[0],
+      mode: extra.length === 4 ? Mode.DOLLAR : extra[0] || Mode.DOLLAR,
       amount: extra.length === 4 ? "" : extra[1],
     },
     tax: {
-      mode: extra[extra.length === 4 ? 0 : 2],
+      mode: extra[extra.length === 4 ? 0 : 2] || Mode.DOLLAR,
       amount: extra[extra.length === 4 ? 1 : 3],
     },
     tip: {
-      mode: extra[extra.length === 4 ? 2 : 4],
+      mode: extra[extra.length === 4 ? 2 : 4] || Mode.DOLLAR,
       amount: extra[extra.length === 4 ? 3 : 5],
     },
     items: result,
