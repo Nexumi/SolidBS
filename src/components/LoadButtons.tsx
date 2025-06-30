@@ -6,7 +6,7 @@ import { Button } from "./ui/button";
 
 export default function LoadButtons(props: { setItems: Setter<Item[]> }) {
   const buttonClass =
-    "border bg-white text-black hover:bg-gray-200 h-auto px-2 py-1";
+    "h-auto border bg-white px-2 py-1 text-black hover:bg-gray-200";
 
   const [online, setOnline] = createSignal(window.navigator.onLine);
 

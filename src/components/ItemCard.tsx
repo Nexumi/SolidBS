@@ -10,14 +10,14 @@ export default function ItemCard(props: {
   onChange?: () => void;
 }) {
   const columnField =
-    "w-full p-0 bg-white text-center focus-visible:ring-0 focus-visible:ring-offset-0 rounded-[0.25rem] text-md";
+    "text-md w-full rounded-[0.25rem] bg-white p-0 text-center focus-visible:ring-0 focus-visible:ring-offset-0";
 
   const [price, setPrice] = createSignal(props.item.price);
 
   return (
     <>
-      <div class="w-full max-w-none sm:max-w-sm bg-gray-100 rounded-xl border">
-        <div class="flex flex-col w-11/12 gap-y-4 m-4">
+      <div class="w-full max-w-none rounded-xl border bg-gray-100 sm:max-w-sm">
+        <div class="m-4 flex w-11/12 flex-col gap-y-4">
           <Input
             class={`${columnField} h-[33.333px]`}
             placeholder="Item Name"
@@ -31,7 +31,7 @@ export default function ItemCard(props: {
             class={`${columnField} h-[33.333px]`}
             classList={{
               "border-red-500 bg-red-50": isNaN(
-                Number(price().replace("$", ""))
+                Number(price().replace("$", "")),
               ),
             }}
             placeholder="Item Price"

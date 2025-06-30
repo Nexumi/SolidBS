@@ -12,9 +12,9 @@ export default function InputField(props: {
   onChange?: (value: string, mode: string) => void;
 }) {
   const inputField =
-    "w-auto h-auto inline p-0 bg-white text-black text-center focus-visible:ring-0 focus-visible:ring-offset-0 rounded-none";
+    "inline h-auto w-auto rounded-none bg-white p-0 text-center text-black focus-visible:ring-0 focus-visible:ring-offset-0";
   const buttonClass =
-    "border border-gray-200 bg-white text-black hover:bg-gray-100 h-auto px-2 py-0 rounded-none";
+    "h-auto rounded-none border border-gray-200 bg-white px-2 py-0 text-black hover:bg-gray-100";
 
   const [mode, setMode] = createSignal<string>(props.mode || Mode.DOLLAR);
 
@@ -35,7 +35,7 @@ export default function InputField(props: {
         {props.label}:{" "}
         <Show when={mode() === Mode.DOLLAR}>
           <Button
-            class={`${buttonClass} border-r-0 rounded-l-md`}
+            class={`${buttonClass} rounded-l-md border-r-0`}
             onclick={() => {
               setMode(Mode.PERCENTAGE);
               props.onChange?.(props.value || "", mode());
@@ -63,7 +63,7 @@ export default function InputField(props: {
         />
         <Show when={mode() === Mode.PERCENTAGE}>
           <Button
-            class={`${buttonClass} border-l-0 rounded-r-md`}
+            class={`${buttonClass} rounded-r-md border-l-0`}
             onclick={() => {
               setMode(Mode.DOLLAR);
               props.onChange?.(props.value || "", mode());

@@ -18,7 +18,7 @@ export default function Result(props: {
         items.push({
           name: item.name,
           price: (priceToFloat(item.price) / item.participants.length).toFixed(
-            2
+            2,
           ),
           participants: [props.participant],
         });
@@ -37,15 +37,15 @@ export default function Result(props: {
     return {
       fee:
         parseFloat(
-          ((props.addons.feePercentage * subtotal()) / 100).toFixed(2)
+          ((props.addons.feePercentage * subtotal()) / 100).toFixed(2),
         ) || 0,
       tax:
         parseFloat(
-          ((props.addons.taxPercentage * subtotal()) / 100).toFixed(2)
+          ((props.addons.taxPercentage * subtotal()) / 100).toFixed(2),
         ) || 0,
       tip:
         parseFloat(
-          ((props.addons.tipPercentage * subtotal()) / 100).toFixed(2)
+          ((props.addons.tipPercentage * subtotal()) / 100).toFixed(2),
         ) || 0,
     };
   });

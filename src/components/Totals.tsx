@@ -15,15 +15,15 @@ export default function Totals(props: {
 }) {
   const [fee, setFee] = createSignal<string>(props.addons.fee.amount);
   const [feeMode, setFeeMode] = createSignal<string>(
-    props.addons.fee.mode || Mode.DOLLAR
+    props.addons.fee.mode || Mode.DOLLAR,
   );
   const [tax, setTax] = createSignal<string>(props.addons.tax.amount);
   const [taxMode, setTaxMode] = createSignal<string>(
-    props.addons.tax.mode || Mode.DOLLAR
+    props.addons.tax.mode || Mode.DOLLAR,
   );
   const [tip, setTip] = createSignal<string>(props.addons.tip.amount);
   const [tipMode, setTipMode] = createSignal<string>(
-    props.addons.tip.mode || Mode.DOLLAR
+    props.addons.tip.mode || Mode.DOLLAR,
   );
 
   const subtotal = createMemo(() => {

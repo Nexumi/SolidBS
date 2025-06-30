@@ -13,22 +13,22 @@ export default function BSPage() {
     items()
       .reduce((p: string[], item) => {
         item.participants.forEach(
-          (participant) => !p.includes(participant) && p.push(participant)
+          (participant) => !p.includes(participant) && p.push(participant),
         );
         return p;
       }, [])
-      .sort()
+      .sort(),
   );
 
   return (
     <>
-      <div class="flex flex-col items-start m-4 gap-y-2">
+      <div class="m-4 flex flex-col items-start gap-y-2">
         <Items
           participants={participants()}
           items={items()}
           onChange={() => {
             const records = items().filter(
-              (item) => item.name || item.price || item.participants.length
+              (item) => item.name || item.price || item.participants.length,
             );
             records.push({
               name: "",
@@ -39,7 +39,11 @@ export default function BSPage() {
           }}
         />
         <LoadButtons setItems={setItems} />
-        <Totals addons={{ fee, tax, tip }} items={items()} participants={participants()} />
+        <Totals
+          addons={{ fee, tax, tip }}
+          items={items()}
+          participants={participants()}
+        />
 
         <Loading />
       </div>

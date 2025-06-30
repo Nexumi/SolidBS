@@ -13,7 +13,7 @@ export default function SplitResults(props: {
   participants: string[];
 }) {
   const buttonClass =
-    "border-2 border-gray-400 bg-white text-black hover:bg-gray-200 h-auto px-2 py-1";
+    "h-auto border-2 border-gray-400 bg-white px-2 py-1 text-black hover:bg-gray-200";
 
   return (
     <>
