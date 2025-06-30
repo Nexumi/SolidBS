@@ -49,8 +49,11 @@ export default function BSPage() {
         />
         <Totals
           fee={fee()}
+          setFee={setFee}
           tax={tax()}
+          setTax={setTax}
           tip={tip()}
+          setTip={setTip}
           items={items()}
           participants={participants()}
         />

@@ -1,4 +1,4 @@
-import { createMemo, createSignal } from "solid-js";
+import { createMemo, Setter } from "solid-js";
 import { Addon, Item, Mode } from "../utils/types";
 import { priceToFloat } from "../utils/utils";
 import InputField from "./InputField";
@@ -6,24 +6,14 @@ import SplitResults from "./SplitResults";
 
 export default function Totals(props: {
   fee: Addon;
+  setFee: Setter<Addon>;
   tax: Addon;
+  setTax: Setter<Addon>;
   tip: Addon;
+  setTip: Setter<Addon>;
   items: Item[];
   participants: string[];
 }) {
-  const [fee, setFee] = createSignal<string>(props.fee.amount);
-  const [feeMode, setFeeMode] = createSignal<string>(
-    props.fee.mode || Mode.DOLLAR,
-  );
-  const [tax, setTax] = createSignal<string>(props.tax.amount);
-  const [taxMode, setTaxMode] = createSignal<string>(
-    props.tax.mode || Mode.DOLLAR,
-  );
-  const [tip, setTip] = createSignal<string>(props.tip.amount);
-  const [tipMode, setTipMode] = createSignal<string>(
-    props.tip.mode || Mode.DOLLAR,
-  );
-
   const subtotal = createMemo(() => {
     return (
       props.items.reduce((price, item) => {
@@ -33,16 +23,22 @@ export default function Totals(props: {
   });
 
   const total = createMemo(() => {
-    const parsedFee = priceToFloat(fee());
-    const parsedTax = priceToFloat(tax());
-    const parsedTip = priceToFloat(tip());
+    const parsedFee = priceToFloat(props.fee.amount);
+    const parsedTax = priceToFloat(props.tax.amount);
+    const parsedTip = priceToFloat(props.tip.amount);
 
     const calculatedFee =
-      feeMode() === Mode.DOLLAR ? parsedFee : (parsedFee * subtotal()) / 100;
+      props.fee.mode === Mode.DOLLAR
+        ? parsedFee
+        : (parsedFee * subtotal()) / 100;
     const calculatedTax =
-      taxMode() === Mode.DOLLAR ? parsedTax : (parsedTax * subtotal()) / 100;
+      props.tax.mode === Mode.DOLLAR
+        ? parsedTax
+        : (parsedTax * subtotal()) / 100;
     const calculatedTip =
-      tipMode() === Mode.DOLLAR ? parsedTip : (parsedTip * subtotal()) / 100;
+      props.tip.mode === Mode.DOLLAR
+        ? parsedTip
+        : (parsedTip * subtotal()) / 100;
 
     return subtotal() + calculatedFee + calculatedTax + calculatedTip;
   });
@@ -53,32 +49,38 @@ export default function Totals(props: {
         <div>Subtotal: ${subtotal().toFixed(2) || "0.00"}</div>
         <InputField
           label="Fee"
-          value={fee()}
-          mode={feeMode()}
+          value={props.fee.amount}
+          mode={props.fee.mode}
           subtotal={subtotal()}
           onChange={(value, mode) => {
-            setFee(value);
-            setFeeMode(mode);
+            props.setFee({
+              amount: value,
+              mode,
+            });
           }}
         />
         <InputField
           label="Tax"
-          value={tax()}
-          mode={taxMode()}
+          value={props.tax.amount}
+          mode={props.tax.mode}
           subtotal={subtotal()}
           onChange={(value, mode) => {
-            setTax(value);
-            setTaxMode(mode);
+            props.setTax({
+              amount: value,
+              mode,
+            });
           }}
         />
         <InputField
           label="Tip"
-          value={tip()}
-          mode={tipMode()}
+          value={props.tip.amount}
+          mode={props.tip.mode}
           subtotal={subtotal()}
           onChange={(value, mode) => {
-            setTip(value);
-            setTipMode(mode);
+            props.setTip({
+              amount: value,
+              mode,
+            });
           }}
         />
         <div>Total: ${total().toFixed(2) || "0.00"}</div>
@@ -87,17 +89,17 @@ export default function Totals(props: {
       <SplitResults
         addons={{
           feePercentage:
-            feeMode() === Mode.DOLLAR
-              ? (parseFloat(fee()) / subtotal()) * 100
-              : parseFloat(fee()),
+            props.fee.mode === Mode.DOLLAR
+              ? (parseFloat(props.fee.amount) / subtotal()) * 100
+              : parseFloat(props.fee.amount),
           taxPercentage:
-            taxMode() === Mode.DOLLAR
-              ? (parseFloat(tax()) / subtotal()) * 100
-              : parseFloat(tax()),
+            props.tax.mode === Mode.DOLLAR
+              ? (parseFloat(props.tax.amount) / subtotal()) * 100
+              : parseFloat(props.tax.amount),
           tipPercentage:
-            tipMode() === Mode.DOLLAR
-              ? (parseFloat(tip()) / subtotal()) * 100
-              : parseFloat(tip()),
+            props.tip.mode === Mode.DOLLAR
+              ? (parseFloat(props.tip.amount) / subtotal()) * 100
+              : parseFloat(props.tip.amount),
         }}
         items={props.items}
         participants={props.participants}

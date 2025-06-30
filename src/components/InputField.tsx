@@ -16,13 +16,11 @@ export default function InputField(props: {
   const buttonClass =
     "h-auto rounded-none border border-gray-200 bg-white px-2 py-0 text-black hover:bg-gray-100";
 
-  const [mode, setMode] = createSignal<string>(props.mode || Mode.DOLLAR);
-
   const displayValue = createMemo(() => {
     const value = parseFloat(props.value || "0");
     const subtotal = parseFloat(String(props.subtotal) || "0");
 
-    if (mode() === Mode.DOLLAR) {
+    if (props.mode === Mode.DOLLAR) {
       return parseFloat(((value / subtotal) * 100).toFixed(2));
     } else {
       return ((value * subtotal) / 100).toFixed(2);
@@ -33,12 +31,11 @@ export default function InputField(props: {
     <>
       <div>
         {props.label}:{" "}
-        <Show when={mode() === Mode.DOLLAR}>
+        <Show when={props.mode === Mode.DOLLAR}>
           <Button
             class={`${buttonClass} rounded-l-md border-r-0`}
             onclick={() => {
-              setMode(Mode.PERCENTAGE);
-              props.onChange?.(props.value || "", mode());
+              props.onChange?.(props.value || "", Mode.PERCENTAGE);
             }}
           >
             $
@@ -47,26 +44,28 @@ export default function InputField(props: {
         <Input
           class={inputField}
           classList={{
-            "rounded-r-md": mode() === Mode.DOLLAR,
-            "rounded-l-md": mode() === Mode.PERCENTAGE,
+            "rounded-r-md": props.mode === Mode.DOLLAR,
+            "rounded-l-md": props.mode === Mode.PERCENTAGE,
           }}
           onChange={(e) => {
             const value = e.target.value.replace(/[^0-9.\/*\-+()%]/g, "");
-            props.onChange?.("", mode());
+            props.onChange?.("", props.mode || Mode.DOLLAR);
             try {
-              props.onChange?.(evaluate(value).toFixed(2), mode());
+              props.onChange?.(
+                evaluate(value).toFixed(2),
+                props.mode || Mode.DOLLAR,
+              );
             } catch {
-              props.onChange?.(value, mode());
+              props.onChange?.(value, props.mode || Mode.DOLLAR);
             }
           }}
           value={props.value}
         />
-        <Show when={mode() === Mode.PERCENTAGE}>
+        <Show when={props.mode === Mode.PERCENTAGE}>
           <Button
             class={`${buttonClass} rounded-r-md border-l-0`}
             onclick={() => {
-              setMode(Mode.DOLLAR);
-              props.onChange?.(props.value || "", mode());
+              props.onChange?.(props.value || "", Mode.DOLLAR);
             }}
           >
             %
@@ -74,9 +73,9 @@ export default function InputField(props: {
         </Show>
       </div>
       <div>
-        {props.label}: {mode() === Mode.PERCENTAGE ? "$" : ""}
-        {displayValue() || (mode() === Mode.DOLLAR ? "0" : "0.00")}
-        {mode() === Mode.DOLLAR ? "%" : ""}
+        {props.label}: {props.mode === Mode.PERCENTAGE ? "$" : ""}
+        {displayValue() || (props.mode === Mode.DOLLAR ? "0" : "0.00")}
+        {props.mode === Mode.DOLLAR ? "%" : ""}
       </div>
     </>
   );

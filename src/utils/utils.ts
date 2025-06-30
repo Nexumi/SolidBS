@@ -1,4 +1,4 @@
-import { Item, ParamType } from "./types";
+import { Item, Mode, ParamType } from "./types";
 
 export function parseURL(url: string = window.location.href) {
   const result: Item[] = [];
@@ -28,16 +28,16 @@ export function parseURL(url: string = window.location.href) {
 
   return {
     fee: {
-      mode: extra[0],
-      amount: extra[1],
+      mode: extra.length === 4 ? Mode.DOLLAR : extra[0],
+      amount: extra.length === 4 ? "" : extra[1],
     },
     tax: {
-      mode: extra[2],
-      amount: extra[3],
+      mode: extra[extra.length === 4 ? 0 : 2],
+      amount: extra[extra.length === 4 ? 1 : 3],
     },
     tip: {
-      mode: extra[4],
-      amount: extra[5],
+      mode: extra[extra.length === 4 ? 2 : 4],
+      amount: extra[extra.length === 4 ? 3 : 5],
     },
     items: result,
   };
