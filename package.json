@@ -8,7 +8,7 @@
     "build": "vite build",
     "serve": "vite preview",
     "init": "bash -c \"npm install && git clone -b dist $(git config --get remote.origin.url) dist\"",
-    "publish": "cd dist && git restore CNAME && git add . && git commit -m \"SolidBS Pre-release\" && git push"
+    "publish": "vite build && cd dist && git restore CNAME && git add . && git commit -m \"SolidBS Pre-release\" && git push"
   },
   "license": "MIT",
   "devDependencies": {
